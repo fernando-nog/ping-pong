@@ -5,7 +5,11 @@ window.KEY = {
 	S: 83
 }
 
-window.pingpong = {}
+window.pingpong = {
+	scoreA : 0,
+ 	scoreB : 0 
+}
+
 pingpong.pressedKeys = [];
 pingpong.ball = {
 	speed: 5,
@@ -55,8 +59,15 @@ function movePaddles() {
 	}
 	if (pingpong.pressedKeys[KEY.S]) {
 		$paddleA.css("top",paddleACssTop+5);
-	}
+		}
 } 
+
+function changeLeftAndTopOfBall(left, top){
+	 $("#ball").css({
+		 "left": left,
+		 "top" : top
+	});
+}
 
 function moveBall(){
 	var $playground = $("#playground"),
@@ -116,8 +127,24 @@ function moveBall(){
 	ball.x += ball.speed * ball.directionX;
 	ball.y += ball.speed * ball.directionY;
 	
-	$("#ball").css({
-				 "left" : ball.x,
-				 "top" : ball.y
-				 });
+	if (ball.x +ball.speed*ball.directionX > playgroundWidth)
+	{
+		 ball.x = 250;
+		 ball.y = 100;
+		 changeLeftAndTopOfBall(ball.x, ball.y);
+		 ball.directionX = -1;
+		 pingpong.scoreA++;
+		 $("#scoreA").html(pingpong.scoreA);
+	}
+	if (ball.x + ball.speed*ball.directionX < 0)
+	{
+		ball.x = 150;
+		ball.y = 100;
+		changeLeftAndTopOfBall(ball.x, ball.y);
+		ball.directionX = 1;
+		pingpong.scoreB++;
+		$("#scoreB").html(pingpong.scoreB);
+	}
+	
+	changeLeftAndTopOfBall(ball.x, ball.y);
 }
